@@ -1,0 +1,11 @@
+apiVersion: scheduling.k8s.io/v1
+description: My custom priority class
+kind: PriorityClass
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"scheduling.k8s.io/v1","description":"My custom priority class","globalDefault":false,"kind":"PriorityClass","metadata":{"annotations":{},"name":"my-priority-class"},"value":1000}
+  generation: 1
+  name: my-priority-class
+preemptionPolicy: PreemptLowerPriority
+value: 1000

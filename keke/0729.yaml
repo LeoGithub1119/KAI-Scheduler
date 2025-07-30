@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    pod-group-name: pg-gpu-job-test-3f2a3a22-3172-4967-9a78-a001e82324cb
+  creationTimestamp: "2025-07-29T01:18:51Z"
+  generateName: gpu-job-test-
+  labels:
+    app: gpu-job-test
+    kai.scheduler/queue: default
+  name: gpu-job-test-s8zgp
+  namespace: kai-scheduler
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: gpu-job-test
+    uid: 3f2a3a22-3172-4967-9a78-a001e82324cb
+  resourceVersion: "1046375"
+  uid: 67098f4f-879e-49a1-a837-f53e311670f2
+spec:
+  containers:
+  - args:
+    - nvidia-smi && sleep infinity
+    command:
+    - /bin/bash
+    - -c
+    image: nvidia/cuda:11.8.0-base-ubuntu22.04
+    imagePullPolicy: IfNotPresent
+    name: gpu
+    resources:
+      limits:
+        nvidia.com/gpu: "1"
+      requests:
+        nvidia.com/gpu: "1"
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-gx66g
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  preemptionPolicy: PreemptLowerPriority
+  priority: 50
+  priorityClassName: train
+  restartPolicy: Always
+  schedulerName: kai-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-gx66g
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2025-07-29T01:18:52Z"
+    message: Unable to schedule pod
+    reason: Unschedulable
+    status: "False"
+    type: PodScheduled
+  phase: Pending
+  qosClass: BestEffort

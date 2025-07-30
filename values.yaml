@@ -11,9 +11,9 @@ global:
   affinity: {}
   tolerations: []
   namespaceLabelSelector: 
-    namespaceLabelName: dong-label
+    team: ml
   podLabelSelector: 
-    # labelName: dong-test
+    app: batch
   resourceReservation:
     namespace: kai-resource-reservation
     serviceAccount: kai-resource-reservation

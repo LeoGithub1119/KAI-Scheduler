@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gpu-job-test
+  labels:
+    app: gpu-job-test
+    # kai.scheduler/queue: default
+  annotations:
+    # scheduling.kueue.x-k8s.io/pod-group: dong-group  ## 新增
+spec:
+  schedulerName: kai-scheduler
+  priorityClassName: train  ## 新增
+  containers:
+  - name: gpu
+    image: nvidia/cuda:11.8.0-base-ubuntu22.04
+    resources:
+      limits:
+        nvidia.com/gpu: 1
+      requests:
+        nvidia.com/gpu: 1
+    command: ["/bin/bash", "-c"]
+    args: ["nvidia-smi && sleep infinity"]
